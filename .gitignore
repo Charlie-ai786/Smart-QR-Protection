@@ -1,0 +1,14 @@
+# Node
+node_modules/
+package-lock.json
+
+# Vite
+dist/
+.vite/
+
+# Logs
+logs
+*.log
+
+# Environment
+.env
