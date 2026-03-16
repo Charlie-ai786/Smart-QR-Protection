@@ -1,1 +1,55 @@
 @import "tailwindcss";
+
+:root {
+  --glass-bg: rgba(15, 23, 42, 0.7);
+  --glass-border: rgba(255, 255, 255, 0.1);
+  --glass-blur: blur(12px);
+  --accent-cyan: #22d3ee;
+  --accent-blue: #3b82f6;
+}
+
+body {
+  margin: 0;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  background-color: #020617;
+  color: white;
+}
+
+.glass-card {
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+  border-radius: 1rem;
+}
+
+.glass-input {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(4px);
+  border-radius: 0.5rem;
+  padding: 0.75rem;
+  width: 100%;
+  color: white;
+  outline: none;
+  transition: all 0.2s;
+}
+
+.glass-input:focus {
+  border-color: var(--accent-cyan);
+  box-shadow: 0 0 10px rgba(34, 211, 238, 0.2);
+}
+
+.cyan-glow {
+  text-shadow: 0 0 15px rgba(34, 211, 238, 0.5);
+}
+
+@keyframes float {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+  100% { transform: translateY(0px); }
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}

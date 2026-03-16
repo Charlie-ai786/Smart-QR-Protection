@@ -13,43 +13,58 @@ app.post("/analyze", (req, res) => {
   let riskScore = 0;
   let reasons = [];
 
-  if (url.includes("http://")) {
-  riskScore += 10;
-  reasons.push("Non-secure HTTP connection detected");
-}
-
-if (url.match(/[0-9]{5,}/)) {
-  riskScore += 10;
-  reasons.push("Random numeric pattern in URL");
-}
-
   if (!url) {
     return res.status(400).json({ message: "URL required" });
   }
 
-  if (url.includes("login") || url.includes("verify") || url.includes("payment")) {
-    riskScore += 40;
-    reasons.push("Suspicious keyword detected");
+  // 1. SSL Check
+  if (url.startsWith("http://")) {
+    riskScore += 25;
+    reasons.push("Non-secure HTTP connection (unencrypted)");
   }
 
-  if (url.length > 60) {
+  // 2. Suspicious TLDs
+  const riskyTLDs = [".xyz", ".top", ".tk", ".ml", ".ga", ".cf", ".gq", ".bid", ".loan", ".zip"];
+  if (riskyTLDs.some(tld => url.toLowerCase().endsWith(tld) || url.toLowerCase().includes(tld + "/"))) {
+    riskScore += 30;
+    reasons.push("High-risk top-level domain (TLD) detected");
+  }
+
+  // 3. URL Shorteners
+  const shorteners = ["bit.ly", "t.co", "goo.gl", "tinyurl.com", "is.gd", "buff.ly", "ow.ly"];
+  if (shorteners.some(s => url.toLowerCase().includes(s))) {
     riskScore += 20;
+    reasons.push("URL shortener used to hide destination");
+  }
+
+  // 4. Keywords
+  const keywords = ["login", "verify", "payment", "bank", "account", "secure", "update", "signin"];
+  if (keywords.some(k => url.toLowerCase().includes(k))) {
+    riskScore += 35;
+    reasons.push("Sensitive keyword detected in path");
+  }
+
+  // 5. Length & Patterns
+  if (url.length > 70) {
+    riskScore += 15;
     reasons.push("Unusually long URL structure");
   }
-
+  if (url.match(/[0-9]{5,}/)) {
+    riskScore += 15;
+    reasons.push("Suspicious numeric string pattern");
+  }
   if (url.includes("@")) {
-    riskScore += 20;
-    reasons.push("Possible redirect pattern");
+    riskScore += 25;
+    reasons.push("Credential redirect pattern (@ symbol)");
   }
 
-  if (riskScore === 0) {
-    reasons.push("No suspicious patterns detected");
-  }
+  // Cap risk score at 100
+  riskScore = Math.min(riskScore, 100);
 
   const status =
-    riskScore > 60
+    riskScore >= 75
       ? "Dangerous"
-      : riskScore > 30
+      : riskScore >= 40
       ? "Suspicious"
       : "Safe";
 
@@ -58,7 +73,7 @@ if (url.match(/[0-9]{5,}/)) {
     url,
     riskScore,
     status,
-    reasons,
+    reasons: reasons.length > 0 ? reasons : ["No immediate threats detected"],
   };
 
   scanHistory.unshift(result);
