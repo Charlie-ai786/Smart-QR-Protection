@@ -116,7 +116,10 @@ function App() {
         </div>
         <div className="flex bg-white/5 p-1 rounded-xl">
           <button 
-            onClick={() => setActiveTab("scanner")}
+            onClick={() => {
+              setActiveTab("scanner");
+              resetScanner();
+            }}
             className={`px-4 py-1.5 rounded-lg text-sm font-medium transition-all ${activeTab === 'scanner' ? 'bg-cyan-500 text-white shadow-lg shadow-cyan-500/20' : 'text-slate-400 hover:text-white'}`}
           >
             Scanner
@@ -147,7 +150,11 @@ function App() {
                   <h2 className="text-2xl font-bold">Safe Scanner</h2>
                 </div>
 
-                <div id="qr-reader" className="overflow-hidden rounded-xl border border-white/10 mb-6 bg-black/20"></div>
+                <div 
+                  id="qr-reader" 
+                  key={`scanner-${activeTab}`} 
+                  className="overflow-hidden rounded-xl border border-white/10 mb-6 bg-black/20 min-h-[300px]"
+                ></div>
 
                 <div className="relative">
                   <input
