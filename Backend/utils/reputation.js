@@ -1,6 +1,6 @@
 // Use global fetch (built-in in Node 18+)
 
-const API_KEY = "AIzaSyCTkfaoOrrEvRGcf4lw85HzIoXOp4ZfXJs"; // 🔴 replace this
+const API_KEY = process.env.GOOGLE_API_KEY; // 🔴 replace this
 
 async function checkURLReputation(url) {
     try {
