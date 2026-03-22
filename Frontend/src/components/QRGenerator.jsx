@@ -1,11 +1,11 @@
 import { useState } from "react";
 import { QRCodeSVG } from "qrcode.react";
-import { Download, ShieldCheck, Share2 } from "lucide-react";
-import { motion } from "framer-motion";
+import { Download, ShieldCheck, QrCode, Zap, ChevronRight } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 
 const QRGenerator = () => {
   const [text, setText] = useState("");
-  const [color, setColor] = useState("#22d3ee");
+  const [color, setColor] = useState("#06b6d4");
 
   const downloadQR = () => {
     const svg = document.getElementById("generated-qr");
@@ -32,63 +32,88 @@ const QRGenerator = () => {
     <motion.div 
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="max-w-md mx-auto p-6 glass-card mt-8"
+      className="max-w-md mx-auto p-8 glass-card"
     >
-      <div className="flex items-center gap-2 mb-6">
-        <ShieldCheck className="text-cyan-400 w-6 h-6" />
-        <h2 className="text-xl font-bold">Safe QR Generator</h2>
+      <div className="flex items-center justify-between mb-8">
+        <div className="flex items-center gap-3">
+          <div className="p-2.5 bg-cyan-500/10 rounded-xl">
+            <QrCode className="text-cyan-400 w-6 h-6" />
+          </div>
+          <div>
+            <h2 className="text-xl font-black text-white tracking-tight">Safe QR Generator</h2>
+            <p className="text-[10px] text-slate-500 font-bold uppercase tracking-widest leading-none mt-1">Encrypted Output</p>
+          </div>
+        </div>
+        <div className="p-2 bg-yellow-500/10 rounded-lg">
+          <Zap size={16} className="text-yellow-500" />
+        </div>
       </div>
 
-      <div className="space-y-4">
+      <div className="space-y-6">
         <div>
-          <label className="text-sm text-gray-400 mb-1 block">Destination URL</label>
+          <label className="text-[10px] text-slate-500 font-bold uppercase tracking-widest mb-2 block">Destination Payload</label>
           <input
             type="text"
-            placeholder="https://example.com"
+            placeholder="Enter URL or secure data..."
             value={text}
             onChange={(e) => setText(e.target.value)}
-            className="glass-input"
+            className="w-full bg-white/5 border border-white/10 rounded-xl py-3 px-4 text-sm text-white focus:outline-none focus:border-cyan-500/50 transition-all placeholder:text-slate-600"
           />
         </div>
 
         <div>
-          <label className="text-sm text-gray-400 mb-1 block">Accent Color</label>
-          <div className="flex gap-2">
-            {["#22d3ee", "#3b82f6", "#a855f7", "#10b981"].map((c) => (
+          <label className="text-[10px] text-slate-500 font-bold uppercase tracking-widest mb-3 block">Cryptographic Tint</label>
+          <div className="flex gap-3">
+            {["#06b6d4", "#3b82f6", "#8b5cf6", "#10b981", "#ef4444"].map((c) => (
               <button
                 key={c}
                 onClick={() => setColor(c)}
-                className={`w-8 h-8 rounded-full border-2 ${color === c ? "border-white" : "border-transparent"}`}
-                style={{ backgroundColor: c }}
+                className={`w-10 h-10 rounded-xl border-2 transition-all transform active:scale-90 ${color === c ? "border-white scale-110 shadow-lg" : "border-transparent opacity-50 hover:opacity-100"}`}
+                style={{ backgroundColor: c, boxShadow: color === c ? `0 0 15px ${c}44` : 'none' }}
               />
             ))}
           </div>
         </div>
 
-        {text && (
-          <div className="flex flex-col items-center bg-white p-4 rounded-lg mt-6">
-            <QRCodeSVG
-              id="generated-qr"
-              value={text}
-              size={200}
-              fgColor={color}
-              level="H"
-              includeMargin={true}
-            />
-            <p className="text-gray-500 text-[10px] mt-2 uppercase tracking-widest font-bold">
-              Verified by Smart QR
-            </p>
-          </div>
-        )}
+        <AnimatePresence>
+          {text && (
+            <motion.div 
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.9 }}
+              className="flex flex-col items-center bg-white p-6 rounded-2xl mt-4 shadow-2xl"
+            >
+              <QRCodeSVG
+                id="generated-qr"
+                value={text}
+                size={220}
+                fgColor={color}
+                level="H"
+                includeMargin={true}
+              />
+              <div className="flex items-center gap-2 mt-4 px-3 py-1 bg-cyan-50 rounded-full">
+                <ShieldCheck size={12} className="text-cyan-600" />
+                <p className="text-cyan-900 text-[9px] uppercase tracking-widest font-black">
+                  Verified Secure Payload
+                </p>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
 
         <button
           onClick={downloadQR}
           disabled={!text}
-          className="w-full mt-4 py-3 bg-cyan-500 hover:bg-cyan-600 disabled:opacity-50 transition rounded-xl font-bold flex items-center justify-center gap-2"
+          className="premium-btn btn-primary w-full mt-4 !rounded-2xl shadow-xl shadow-cyan-500/20"
         >
           <Download size={20} />
-          Download Safe QR
+          <span className="font-bold tracking-tight">EXPORT SECURE QR</span>
+          <ChevronRight size={16} className="ml-auto opacity-50" />
         </button>
+        
+        <p className="text-[9px] text-slate-500 text-center italic">
+          All generated codes are optimized for high-reliability scanning and tamper resistance.
+        </p>
       </div>
     </motion.div>
   );

@@ -101,7 +101,7 @@ function validateName(name, payment) {
   }
 
   // Should not contain random special characters (mostly alphanumeric and spaces)
-  const specialCharsRegex = /[!#\$%\^&\*\(\)_+\=\[\]\{\};':"\|<>\?]/;
+  const specialCharsRegex = /[!#$^&*()_+={}[\];'":|<>?]/;
   if (specialCharsRegex.test(name)) {
     payment.is_suspicious = true;
     payment.reason.push("Receiver name contains unusual special characters.");

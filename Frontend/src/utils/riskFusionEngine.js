@@ -19,6 +19,11 @@ export function fuseRisk(threat, payment, history = []) {
   // 1. Initial risk score and triggers from general threat detection
   let score = threat.risk_score || 0;
   const triggers = [...(threat.reason || [])];
+  
+  // 1.5 Manual Escalation for Reputation Blacklist
+  if (triggers.some(r => r.includes("Blacklisted"))) {
+    score += 30;
+  }
 
   // 2. Aggregate Payment-Specific Risks
   if (payment && payment.is_payment_qr) {

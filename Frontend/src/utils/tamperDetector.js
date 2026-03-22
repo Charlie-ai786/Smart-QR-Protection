@@ -76,7 +76,7 @@ export function detectTamper(qr_data_history, timestamps) {
  * Visual Heuristic (Simulated)
  * In a real mobile app, we would check for sticker edges or blur.
  */
-export function detectVisualAnomalies(imageData) {
+export function detectVisualAnomalies() {
   // Placeholder for future computer vision integration
   return { suspicious: false, reason: null };
 }

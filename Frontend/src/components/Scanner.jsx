@@ -13,31 +13,31 @@ const Scanner = ({ url, setUrl, onScanSuccess, onAnalyze, loading }) => {
       initial={{ opacity: 0, scale: 0.95 }}
       animate={{ opacity: 1, scale: 1 }}
       exit={{ opacity: 0, scale: 0.95 }}
-      className="glass-card p-6"
+      className="glass-card p-5 max-w-lg mx-auto"
     >
-      <div className="flex items-center gap-3 mb-6">
-        <Scan className="text-cyan-400" />
-        <h2 className="text-2xl font-bold">Safe Scanner</h2>
+      <div className="flex items-center gap-2 mb-4">
+        <Scan className="text-cyan-400" size={20} />
+        <h2 className="text-lg font-bold">QR Intelligence</h2>
       </div>
 
       <QRScanner 
         onScanSuccess={onScanSuccess} 
       />
 
-      <div className="relative mt-6">
+      <div className="relative mt-8">
         <input
           type="text"
-          placeholder="Paste a URL to analyze..."
+          placeholder="Enter a URL to probe..."
           value={url}
           onChange={(e) => setUrl(e.target.value)}
-          className="glass-input pr-12"
+          className="w-full bg-white/5 border border-white/10 rounded-xl py-3.5 pl-4 pr-14 text-sm text-white focus:outline-none focus:border-cyan-500/50 transition-all placeholder:text-slate-600"
         />
         <button 
           onClick={() => onAnalyze()}
-          disabled={loading}
-          className="absolute right-2 top-1.5 p-1.5 bg-cyan-500 hover:bg-cyan-600 rounded-lg transition disabled:opacity-50"
+          disabled={loading || !url}
+          className="absolute right-2 top-2 p-2 bg-cyan-500 hover:bg-cyan-600 rounded-lg transition-all disabled:opacity-50 shadow-lg shadow-cyan-500/20 active:scale-95"
         >
-          <ChevronRight size={20} />
+          <ChevronRight size={20} className="text-white" />
         </button>
       </div>
 
