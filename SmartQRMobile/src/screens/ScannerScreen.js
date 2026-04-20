@@ -30,8 +30,13 @@ export default function ScannerScreen({ navigation }) {
   }, [navigation]);
 
   const handleBarCodeScanned = ({ type, data }) => {
-    if (scanned) return;
+    console.log(`[Scanner] barcode scanned | type: ${type} | data: ${data}`);
+    if (scanned) {
+      console.log('[Scanner] already scanned, ignoring.');
+      return;
+    }
     setScanned(true);
+    console.log('[Scanner] navigating to Processing with data...');
     navigation.navigate('Processing', { qrData: data });
   };
 
@@ -128,8 +133,9 @@ export default function ScannerScreen({ navigation }) {
           <CameraView
             onBarcodeScanned={scanned ? undefined : handleBarCodeScanned}
             barcodeScannerSettings={{
-              barcodeTypes: ['qr', 'ean13', 'ean8', 'code128', 'code39', 'upc_a', 'upc_e'],
+              barcodeTypes: ['qr'],
             }}
+            facing="back"
             enableTorch={torch}
             style={StyleSheet.absoluteFillObject}
           />

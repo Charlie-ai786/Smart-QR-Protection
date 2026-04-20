@@ -17,27 +17,27 @@ const { width } = Dimensions.get('window');
 const QR_SIZE = width * 0.62;
 
 const TEMPLATES = [
-  { icon: Link,          label: 'URL',   color: '#22d3ee', placeholder: 'https://example.com' },
-  { icon: MessageSquare, label: 'Text',  color: '#a78bfa', placeholder: 'Enter any text...' },
-  { icon: Mail,          label: 'Email', color: '#34d399', placeholder: 'mailto:you@example.com' },
-  { icon: Phone,         label: 'Phone', color: '#f59e0b', placeholder: 'tel:+911234567890' },
-  { icon: Wifi,          label: 'WiFi',  color: '#f472b6', placeholder: 'WIFI:S:MyNetwork;T:WPA;P:password;;' },
+  { icon: Link, label: 'URL', color: '#22d3ee', placeholder: 'https://example.com' },
+  { icon: MessageSquare, label: 'Text', color: '#a78bfa', placeholder: 'Enter any text...' },
+  { icon: Mail, label: 'Email', color: '#34d399', placeholder: 'mailto:you@example.com' },
+  { icon: Phone, label: 'Phone', color: '#f59e0b', placeholder: 'tel:+911234567890' },
+  { icon: Wifi, label: 'WiFi', color: '#f472b6', placeholder: 'WIFI:S:MyNetwork;T:WPA;P:password;;' },
 ];
 
 const ERROR_LEVELS = [
-  { key: 'L', pct: '7%',  label: 'Low' },
+  { key: 'L', pct: '7%', label: 'Low' },
   { key: 'M', pct: '15%', label: 'Medium' },
   { key: 'Q', pct: '25%', label: 'Quartile' },
   { key: 'H', pct: '30%', label: 'High' },
 ];
 
 export default function QRGeneratorScreen({ navigation }) {
-  const [inputText, setInputText]       = useState('');
-  const [qrValue, setQrValue]           = useState('');
+  const [inputText, setInputText] = useState('');
+  const [qrValue, setQrValue] = useState('');
   const [activeTemplate, setActiveTemplate] = useState(0);
-  const [errorLevel, setErrorLevel]     = useState('M');
-  const [downloading, setDownloading]   = useState(false);
-  const [sharing, setSharing]           = useState(false);
+  const [errorLevel, setErrorLevel] = useState('M');
+  const [downloading, setDownloading] = useState(false);
+  const [sharing, setSharing] = useState(false);
   const [downloadDone, setDownloadDone] = useState(false);
 
   const viewShotRef = useRef(null);
@@ -75,13 +75,13 @@ export default function QRGeneratorScreen({ navigation }) {
 
       // 2. Capture the QR view
       const uri = await viewShotRef.current.capture();
-      
+
       // Ensure the URI is valid for MediaLibrary (sometimes needs file:// prefix)
       const assetUri = uri.startsWith('file://') ? uri : `file://${uri}`;
 
       // 3. Save to device gallery
       const asset = await MediaLibrary.createAssetAsync(assetUri);
-      
+
       // Try to save to a specific album, or just leave in Camera Roll
       try {
         const album = await MediaLibrary.getAlbumAsync('QRShield');
@@ -114,10 +114,10 @@ export default function QRGeneratorScreen({ navigation }) {
   // ── Share Image ───────────────────────────────────────────────────────────
   const handleShare = async () => {
     if (!qrValue || !viewShotRef.current) return;
-    
+
     try {
       setSharing(true);
-      
+
       // Check if sharing is available on the device
       const isAvailable = await Sharing.isAvailableAsync();
       if (!isAvailable) {
@@ -127,7 +127,7 @@ export default function QRGeneratorScreen({ navigation }) {
 
       // 1. Capture the QR view
       const uri = await viewShotRef.current.capture();
-      
+
       // 2. Share the captured file
       await Sharing.shareAsync(uri, {
         mimeType: 'image/png',
@@ -249,19 +249,19 @@ export default function QRGeneratorScreen({ navigation }) {
             </TouchableOpacity>
 
             {/* Share */}
-            <TouchableOpacity 
-                style={styles.shareBtn} 
-                onPress={handleShare}
-                disabled={sharing}
+            <TouchableOpacity
+              style={styles.shareBtn}
+              onPress={handleShare}
+              disabled={sharing}
             >
-                {sharing ? (
-                    <ActivityIndicator size="small" color="#94a3b8" />
-                ) : (
-                    <>
-                        <Share2 size={20} color="#94a3b8" />
-                        <Text style={styles.shareBtnText}>Share QR</Text>
-                    </>
-                )}
+              {sharing ? (
+                <ActivityIndicator size="small" color="#94a3b8" />
+              ) : (
+                <>
+                  <Share2 size={20} color="#94a3b8" />
+                  <Text style={styles.shareBtnText}>Share QR</Text>
+                </>
+              )}
             </TouchableOpacity>
           </View>
         )}
