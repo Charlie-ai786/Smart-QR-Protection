@@ -4,6 +4,7 @@ import ScannerScreen from '../screens/ScannerScreen';
 import ProcessingScreen from '../screens/ProcessingScreen';
 import ResultScreen from '../screens/ResultScreen';
 import HistoryScreen from '../screens/HistoryScreen';
+import QRGeneratorScreen from '../screens/QRGeneratorScreen';
 
 const Stack = createStackNavigator();
 
@@ -20,6 +21,7 @@ export default function AppNavigator() {
       <Stack.Screen name="Processing" component={ProcessingScreen} />
       <Stack.Screen name="Result" component={ResultScreen} />
       <Stack.Screen name="History" component={HistoryScreen} />
+      <Stack.Screen name="QRGenerator" component={QRGeneratorScreen} />
     </Stack.Navigator>
   );
 }

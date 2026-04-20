@@ -46,6 +46,22 @@ export const getHistory = async () => {
 };
 
 /**
+ * Deletes a single scan result from AsyncStorage
+ * @param {string} id - The ID of the scan to delete
+ */
+export const deleteScan = async (id) => {
+  try {
+    const history = await getHistory();
+    const updatedHistory = history.filter(item => item.id !== id);
+    await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(updatedHistory));
+    return updatedHistory;
+  } catch (error) {
+    console.error("Error deleting from AsyncStorage:", error);
+    return [];
+  }
+};
+
+/**
  * Clears the entire scan history
  */
 export const clearHistory = async () => {

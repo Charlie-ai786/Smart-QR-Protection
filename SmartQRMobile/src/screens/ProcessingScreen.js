@@ -48,10 +48,11 @@ export default function ProcessingScreen({ route, navigation }) {
 
         setStatus("Finalizing report...");
         await new Promise(r => setTimeout(r, 200));
-        const fused = fuseRisk(threatRes.threat, paymentRes.payment, []);
+        // Pass mlRes as 4th arg so fusion engine can merge backend + local scores
+        const fused = fuseRisk(threatRes.threat, paymentRes.payment, [], mlRes);
         
         const finalResult = {
-          ...mlRes,
+          ...(mlRes || {}),   // safe spread even when backend is unreachable
           qr_data: qrData,
           payment: paymentRes.payment.is_payment_qr ? paymentRes.payment : null,
           fusion: fused.final,
