@@ -7,7 +7,8 @@ import axios from "axios";
 async function checkURLReputation(url) {
   try {
     // Call the backend reputation endpoint
-    const response = await axios.post("http://localhost:5000/reputation", { url });
+    const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:5000";
+    const response = await axios.post(`${API_BASE}/reputation`, { url });
     return response.data;
   } catch {
     console.warn("Reputation API unavailable, falling back to heuristics.");
